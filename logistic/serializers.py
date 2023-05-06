@@ -8,16 +8,13 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'title', 'description']
-        
-    
 
 
 class ProductPositionSerializer(serializers.ModelSerializer):
     # настройте сериализатор для позиции продукта на складе
     class Meta:
         model = StockProduct
-        fields = ['product', 'quantity', 'price']
-    
+        fields = ['product', 'quantity', 'price', ]
 
 
 class StockSerializer(serializers.ModelSerializer):
@@ -27,7 +24,7 @@ class StockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stock
-        fields = ['id', 'address', 'positions']
+        fields = ['id', 'address', 'positions', ]
 
     def create(self, validated_data):
         # достаем связанные данные для других таблиц
@@ -40,13 +37,15 @@ class StockSerializer(serializers.ModelSerializer):
         # в нашем случае: таблицу StockProduct
         # с помощью списка positions
         for field_position in positions:
-            StockProduct.objects.get_or_create(
-            product=field_position['product'], 
-            defaults={'quantity': field_position.get['quantity'],
-                      'price': field_position.get['price'] }
+            StockProduct.objects.create(
+                stock = stock,
+                product = field_position['product'],
+                quantity = field_position.get['quantity'],
+                price = field_position.get['price'] 
+                # defaults={'quantity': field_position.get['quantity'],
+                #           'price': field_position.get['price'] }            
         )
-        # return super().update(product_update)
-
+        
         return stock
 
     def update(self, instance, validated_data):
@@ -61,9 +60,10 @@ class StockSerializer(serializers.ModelSerializer):
         # с помощью списка positions
         for field_position in positions:
             StockProduct.objects.update_or_create(
-                product=field_position['product'], 
-                defaults={'quantity': field_position.get['quantity'], 
-                          'price': field_position.get['price'] }
+                stock = stock,
+                product = field_position['product'], 
+                defaults = {'quantity': field_position.get['quantity'], 
+                          'price': field_position.get['price'] }                
             )
 
         return stock
