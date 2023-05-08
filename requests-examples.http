@@ -85,6 +85,6 @@ Content-Type: application/json
 ###
 
 # поиск складов, где есть определенный продукт
-GET {{baseUrl}}/stocks/?products=9
+GET {{baseUrl}}/stocks/?products=2
 Content-Type: application/json
 
